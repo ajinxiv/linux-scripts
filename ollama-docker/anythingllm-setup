@@ -1,0 +1,41 @@
+#!/bin/bash
+
+_echo() { echo -e "\e[1m==> $@\e[0m"; }
+
+if ! command -v docker &> /dev/null; then
+    echo -e "\e[31;1mERROR\e[0m: docker is not installed"
+    exit 1
+fi
+
+if test -z "$1"; then
+    echo -e "\e[31;1mERROR\e[0m: please, specify a directory for AnythingLLM's data\n"
+    echo -e "\e[1mUsage\e[0m:\n  $0 <directory>"
+    exit 1
+fi
+
+
+STORAGE_LOC="$1"
+
+_echo "Creating AnythingLLM files..."
+if ! test -f "$STORAGE_LOC/.env"; then
+    mkdir -p "$STORAGE_LOC"
+    touch "$STORAGE_LOC/.env"
+fi
+
+_echo "Pulling mintplexlabs/anythingllm ...\e[0m"
+docker pull mintplexlabs/anythingllm
+
+_echo "Stopping anythingllm ..."
+docker stop anythingllm
+
+_echo "Updating container ..."
+docker rm anythingllm
+docker run -d -p 3001:3001 \
+	--cap-add SYS_ADMIN \
+	-v ${STORAGE_LOC}:/app/server/storage \
+	-e STORAGE_DIR="/app/server/storage" \
+	--name anythingllm \
+	--restart always \
+	mintplexlabs/anythingllm
+
+_echo "Done"

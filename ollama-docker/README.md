@@ -34,3 +34,18 @@ usage:
 ```bash
 $ ollama-setup
 ```
+
+### `anythingllm-setup`
+
+this script sets up an AnythingLLM container via docker.
+
+all that's needed to set up is provide the script a path that can
+be used as AnythingLLM's permanent storage directory.
+
+usage:
+
+```bash
+$ anythingllm-setup ~/.AnythingLLM
+```
+
+after that, you can open `localhost:3001` in your browser.
