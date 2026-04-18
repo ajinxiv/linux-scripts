@@ -54,3 +54,18 @@ $ anythingllm-setup ~/.AnythingLLM
 ```
 
 after that, you can open `localhost:3001` in your browser.
+
+### `openwebui-setup`
+
+this script sets up an Open-WebUI container via docker.
+
+just provide the script with a directory where it can store its
+data.
+
+usage:
+
+```bash
+$ openwebui-setup ~/.OpenWebUI
+```
+
+after that, you can open `localhost:8080` in your browser.
