@@ -26,6 +26,11 @@ $ docker exec -it ollama ollama -v
 
 this script sets up ollama via docker for AMD GPUs (ROCm).
 
+> [!NOTE]
+> ROCm does not currently support RX 6600 (gfx1032 or  10.3.2).
+> in order to use GPU acceleration, it is possible to override the
+> HSA to a similar supported version (gfx1030 or 10.3.0).
+
 you may tweak it to use it with other GPUs (i.e NVidia) or your
 CPU by following the [Ollama docs](https://docs.ollama.com/docker).
 
