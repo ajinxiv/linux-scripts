@@ -32,6 +32,7 @@ docker rm open-webui
 docker run -d -p 3000:8080 \
 	--add-host=host.docker.internal:host-gateway \
 	-v $STORAGE_LOC:/app/backend/data \
+	-e WEBUI_AUTH=False \
 	--name open-webui \
 	--restart always \
 	openwebui/open-webui
