@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 _echo() { echo -e "\e[1m==> $@\e[0m"; }
 
 if ! command -v docker &> /dev/null; then
