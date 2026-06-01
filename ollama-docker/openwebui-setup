@@ -21,8 +21,8 @@ if ! test -d "$STORAGE_LOC"; then
     mkdir -p "$STORAGE_LOC"
 fi
 
-_echo "Pulling openwebui/open-webui ...\e[0m"
-docker pull openwebui/open-webui
+_echo "Pulling ghcr.io/open-webui/open-webui ...\e[0m"
+docker pull ghcr.io/open-webui/open-webui:main
 
 _echo "Stopping open-webui ..."
 docker stop open-webui
@@ -35,6 +35,6 @@ docker run -d -p 3000:8080 \
 	-e WEBUI_AUTH=False \
 	--name open-webui \
 	--restart always \
-	openwebui/open-webui
+	ghcr.io/open-webui/open-webui:main
 
 _echo "Done"
