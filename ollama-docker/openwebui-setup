@@ -1,5 +1,7 @@
 #!/bin/bash
 
+WEBUI_CONFIG="$HOME/.config/webui-path.conf"
+
 _echo() { echo -e "\e[1m==> $@\e[0m"; }
 
 if ! command -v docker &> /dev/null; then
@@ -7,18 +9,32 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
-if test -z "$1"; then
-    echo -e "\e[31;1mERROR\e[0m: please, specify a directory for Open WebUI data\n"
-    echo -e "\e[1mUsage\e[0m:\n  $0 <directory>"
-    exit 1
+
+if test -f "$WEBUI_CONFIG"; then
+    STORAGE_LOC="$(cat $WEBUI_CONFIG)"
+    _echo "Loading config..."
+    echo "Storage location: $STORAGE_LOC"
+else
+    STORAGE_LOC="$1"
+
+    if test -z "$1"; then
+        echo -e "\e[31;1mERROR\e[0m: please, specify a directory for Open WebUI data\n"
+        echo -e "\e[1mUsage\e[0m:\n  $0 <directory>"
+        exit 1
+    fi
 fi
 
-
-STORAGE_LOC="$1"
 
 if ! test -d "$STORAGE_LOC"; then
     _echo "Creating Open WebUI files..."
     mkdir -p "$STORAGE_LOC"
+fi
+
+
+if ! test -f "$WEBUI_CONFIG"; then
+    echo -e "\e[1mNOTE\e[0m: the path will be remembered. To reset, remove the following file:"
+    echo -e "    ${WEBUI_CONFIG/$HOME/\~}\n"
+    echo "$STORAGE_LOC" > $WEBUI_CONFIG
 fi
 
 _echo "Pulling ghcr.io/open-webui/open-webui ...\e[0m"
