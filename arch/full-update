@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+_echo() { echo -e "\e[1m==> $@\e[0m"; }
+
+
+if [ $UID -eq 0 ]; then
+    echo -e "\e[1;31mERROR:\e[0m do not run this script as sudo!"
+    exit 1
+fi
+
+
+# Pacman
+_echo "Pacman"
+sudo pacman -Syu
+
+
+# Flatpak
+if $(command -v flatpak &> /dev/null); then
+    _echo "Flatpak"
+    flatpak update -y
+fi
