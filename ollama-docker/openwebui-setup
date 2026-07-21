@@ -64,4 +64,7 @@ docker run -d -p 3000:8080 \
 	--restart always \
 	ghcr.io/open-webui/open-webui:main
 
+_echo "Cleaning up ..."
+docker image prune --all --force
+
 _echo "Done"

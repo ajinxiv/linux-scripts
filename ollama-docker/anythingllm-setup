@@ -38,4 +38,7 @@ docker run -d -p 3001:3001 \
 	--restart always \
 	mintplexlabs/anythingllm
 
+_echo "Cleaning up ..."
+docker image prune --all --force
+
 _echo "Done"
