@@ -1,0 +1,178 @@
+#!/bin/bash
+
+set -e
+
+_echo() { echo -e "\e[1m==> $@\e[0m"; }
+_info() { echo -e "\e[1m  -> "; }
+
+if [ $UID -ne 0 ]; then
+    echo -e "Please, run this script with sudo!"
+    exit 1
+fi
+
+
+# === SYSCTL ===
+
+_echo "Setting up sysctl ..."
+
+_info "/etc/sysctl.d/10-default.conf"
+
+cat << EOF > /etc/sysctl.d/10-default.conf
+# Reduce tendency to swap
+vm.swappiness = 30
+
+# Reduce tendency to reclaim cache memory
+vm.vfs_cache_pressure = 50
+
+# Controls the number of pages read from swap at once. Defaults to 3.
+# Recommended: 1 page for swaps in SSD and 2 pages for swaps in HDD.
+vm.page-cluster = 0
+
+# Increase network device queue. May prevent packet loss.
+net.core.netdev_max_backlog = 4096
+
+# Disable Watchdog. This reduces boot and shutdown times. Not good for servers!
+kernel.nmi_watchdog = 0
+EOF
+
+
+# === UDEV RULES ===
+
+_echo "Setting up UDEV rules ..."
+
+_info "/etc/udev/rules.d/40-hpet-permissions.rules"
+
+cat << EOF > /etc/udev/rules.d/40-hpet-permissions.rules
+KERNEL=="rtc0", GROUP="audio"
+KERNEL=="hpet", GROUP="audio"
+EOF
+
+_info "/etc/udev/rules.d/60-ioschedulers.rules"
+
+cat << EOF > /etc/udev/rules.d/60-ioschedulers.rules
+# HDD
+ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
+
+# SSD
+ACTION=="add|change", KERNEL=="sd[a-z]*|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+
+# NVMe SSD
+ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
+EOF
+
+_info "/etc/udev/rules.d/99-cpu-dma-latency.rules"
+
+cat << EOF > /etc/udev/rules.d/99-cpu-dma-latency.rules
+DEVPATH=="devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
+EOF
+
+
+# === ENVIRONMENT VARIABLES ===
+
+_echo "Setting up environment variables ..."
+
+_info "/etc/environment.d"
+
+mkdir -p /etc/environment.d
+
+_info "/etc/environment.d/30-opencl-rusticl.conf"
+
+cat << EOF > /etc/environment.d/30-opencl-rusticl.conf
+RUSTICL_ENABLE=radeonsi
+EOF
+
+_info "/etc/environment.d/30-rocm.conf"
+
+cat << EOF > /etc/environment.d/30-rocm.conf
+HSA_OVERRIDE_GFX_VERSION=10.3.0
+EOF
+
+_info "/etc/environment.d/30-vdpau.conf"
+
+cat << EOF > /etc/environment.d/30-vdpau.conf
+VDPAU_DRIVER=radeonsi
+EOF
+
+
+# === ZRAM GENERATOR ===
+
+_echo "Setting up ZRAM Generator ..."
+
+_info "/etc/systemd/zram-generator.conf"
+
+cat << EOF > /etc/systemd/zram-generator.conf
+[zram0]
+zram-size = min(ram / 4, 4096)
+compression-algorithm = zstd
+options = discard
+EOF
+
+
+# === SYSTEMD-RESOLVED  ===
+
+_echo "Setting up systemd-resolved ..."
+
+_info "/etc/systemd/resolved.conf.d"
+
+mkdir -p /etc/systemd/resolved.conf.d
+
+_info "/etc/systemd/resolved.conf.d/default.conf"
+
+cat << EOF > /etc/systemd/resolved.conf.d/default.conf
+[Resolve]
+Cache=yes
+ReadEtcHosts=yes
+StaleRetentionSec=604800
+EOF
+
+_info "systemctl enable --now systemd-resolved.service"
+
+systemctl enable --now systemd-resolved.service
+
+
+# === SUDO ===
+
+_echo "Setting up sudo ..."
+
+_info "/etc/sudoers.d/10_default"
+
+cat << EOF > /etc/sudoers.d/10_default"
+# Allow users of group 'wheel' to use sudo
+%wheel ALL=(ALL:ALL) ALL
+
+# Enable password feedback (shows *** when typing password)
+Defaults pwfeedback
+EOF
+
+
+# === CMDLINE ===
+
+_echo "Setting up kernel command-line (UKI-only) ..."
+
+_info "/etc/cmdline.d/11-video-and-iommu.conf"
+
+cat << EOF > /etc/cmdline.d/11-video-and-iommu.conf
+video=DP-1:1920x1080@200 iommu=pt
+EOF
+
+
+# === KERNEL MODULES ===
+
+_echo "Setting up kernel modules ..."
+
+_info "/etc/modules-load.d/i2c-dev.conf"
+
+cat << EOF > /etc/modules-load.d/i2c-dev.conf
+i2c-dev
+EOF
+
+_info "/etc/modules-load.d/ntsync.conf"
+
+cat << EOF > /etc/modules-load.d/ntsync.conf
+ntsync
+EOF
+
+
+# ===///===
+
+_echo "Done"
