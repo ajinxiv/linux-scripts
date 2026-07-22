@@ -22,6 +22,11 @@ docker run -d \
     -v ollama:/root/.ollama \
     -p 11434:11434 \
     -e OLLAMA_VULKAN=1 \
+    -e OLLAMA_NO_CLOUD=1 \
+    -e OLLAMA_KEEP_ALIVE=10m \
+    -e OLLAMA_FLASH_ATTENTION=1 \
+    -e OLLAMA_KV_CACHE_TYPE=q8_0 \
+    -e OLLAMA_GPU_OVERHEAD=1073741824 \
     -e HSA_OVERRIDE_GFX_VERSION=10.3.0 \
     --name ollama \
     --restart always \
