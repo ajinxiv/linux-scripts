@@ -23,7 +23,7 @@ cat << EOF > /etc/skel/.bashrc
 #
 
 # If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+[[ \$- != *i* ]] && return
 
 # set history size
 HISTSIZE=1000
@@ -38,7 +38,7 @@ shopt -s histappend
 shopt -s checkwinsize
 
 # enable colors
-case "$TERM" in
+case "\$TERM" in
   xterm-color|*-256color)
     alias ls='ls --color=auto --group-directories-first'
 
@@ -54,7 +54,7 @@ case "$TERM" in
 esac
 
 # prompt
-PS1='\[\e[1;96m\]\u\[\e[0m\]@\[\e[1;93m\]\h\[\e[0m\] [\[\e[32m\]\w\[\e[0m\]] $ '
+PS1='\[\e[1;96m\]\u\[\e[0m\]@\[\e[1;93m\]\h\[\e[0m\] [\[\e[32m\]\w\[\e[0m\]] \$ '
 
 # ls aliases
 alias ll='ls -l'
@@ -222,17 +222,19 @@ EOF
 
 _echo "Adding up user XDG directories (PATH/XDG_DATA_DIRS) ..."
 
+_info "/etc/profile.d/xx-usr-xdg-dirs.sh"
+
 cat << EOF > /etc/profile.d/xx-usr-xdg-dirs.sh
 #!/bin/bash
 
-HOME_LOCAL_BIN="$HOME/.local/bin"
-HOME_LOCAL_SHARE_APPLICATIONS="$HOME/.local/share/applications"
+HOME_LOCAL_BIN="\$HOME/.local/bin"
+HOME_LOCAL_SHARE_APPLICATIONS="\$HOME/.local/share/applications"
 
 # Add user binaries to PATH
-append_path "$HOME_LOCAL_BIN"
+append_path "\$HOME_LOCAL_BIN"
 
 # Add user desktop shortcuts to XDG_DATA_DIRS
-export XDG_DATA_DIRS="$XDG_DATA_DIRS:$HOME_LOCAL_SHARE_APPLICATIONS"
+export XDG_DATA_DIRS="\$XDG_DATA_DIRS:\$HOME_LOCAL_SHARE_APPLICATIONS"
 
 # cleanup
 unset HOME_LOCAL_BIN
