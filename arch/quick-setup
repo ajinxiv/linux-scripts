@@ -83,6 +83,7 @@ cat << EOF > /etc/skel/.bash_logout
 #
 EOF
 
+
 # === SYSCTL ===
 
 _echo "Setting up sysctl ..."
