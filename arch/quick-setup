@@ -75,9 +75,9 @@ _info "/etc/environment.d"
 
 mkdir -p /etc/environment.d
 
-_info "/etc/environment.d/30-opencl-rusticl.conf"
+_info "/etc/environment.d/30-mesa-opencl.conf"
 
-cat << EOF > /etc/environment.d/30-opencl-rusticl.conf
+cat << EOF > /etc/environment.d/30-mesa-opencl.conf
 RUSTICL_ENABLE=radeonsi
 EOF
 
@@ -136,7 +136,7 @@ _echo "Setting up sudo ..."
 
 _info "/etc/sudoers.d/10_default"
 
-cat << EOF > /etc/sudoers.d/10_default"
+cat << EOF > /etc/sudoers.d/10_default
 # Allow users of group 'wheel' to use sudo
 %wheel ALL=(ALL:ALL) ALL
 
@@ -149,10 +149,14 @@ EOF
 
 _echo "Setting up kernel command-line (UKI-only) ..."
 
+_info "/etc/cmdline.d"
+
+mkdir -p /etc/cmdline.d
+
 _info "/etc/cmdline.d/11-video-and-iommu.conf"
 
 cat << EOF > /etc/cmdline.d/11-video-and-iommu.conf
-video=DP-1:1920x1080@200 iommu=pt
+video=DP-1:1920x1080@144 iommu=pt
 EOF
 
 
@@ -171,7 +175,6 @@ _info "/etc/modules-load.d/ntsync.conf"
 cat << EOF > /etc/modules-load.d/ntsync.conf
 ntsync
 EOF
-
 
 # ===///===
 
