@@ -3,13 +3,85 @@
 set -e
 
 _echo() { echo -e "\e[1m==> $@\e[0m"; }
-_info() { echo -e "\e[1m  -> "; }
+_info() { echo -e "\e[36m  -> $@\e[0m"; }
 
 if [ $UID -ne 0 ]; then
     echo -e "Please, run this script with sudo!"
     exit 1
 fi
 
+
+# === SKEL ===
+
+_echo "Setting up skel ..."
+
+_info "/etc/skel/.bashrc"
+
+cat << EOF > /etc/skel/.bashrc
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# set history size
+HISTSIZE=1000
+
+# prevent duplicates
+HISTCONTROL=ignoreboth
+
+# append to the history instead of overwriting
+shopt -s histappend
+
+# check terminal window size to update $LINES and $COLUMNS
+shopt -s checkwinsize
+
+# enable colors
+case "$TERM" in
+  xterm-color|*-256color)
+    alias ls='ls --color=auto --group-directories-first'
+
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+    alias ip='ip --color=auto'
+    alias tree='tree -C'
+    ;;
+esac
+
+# prompt
+PS1='\[\e[1;96m\]\u\[\e[0m\]@\[\e[1;93m\]\h\[\e[0m\] [\[\e[32m\]\w\[\e[0m\]] $ '
+
+# ls aliases
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+
+# load profile definitions
+[[ -f ~/.bash_profile ]] && . ~/.bash_profile
+
+# load bash aliases
+[[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
+EOF
+
+_info "/etc/skel/.bash_profile"
+
+cat << EOF > /etc/skel/.bash_profile
+DIFFPROG=nano
+EDITOR=nano
+EOF
+
+_info "/etc/skel/.bash_logout"
+
+cat << EOF > /etc/skel/.bash_logout
+#
+# ~/.bash_logout
+#
+EOF
 
 # === SYSCTL ===
 
@@ -145,7 +217,29 @@ Defaults pwfeedback
 EOF
 
 
-# === CMDLINE ===
+# === USER XDG DIRECTORIES ===
+
+_echo "Adding up user XDG directories (PATH/XDG_DATA_DIRS) ..."
+
+cat << EOF > /etc/profile.d/xx-usr-xdg-dirs.sh
+#!/bin/bash
+
+HOME_LOCAL_BIN="$HOME/.local/bin"
+HOME_LOCAL_SHARE_APPLICATIONS="$HOME/.local/share/applications"
+
+# Add user binaries to PATH
+append_path "$HOME_LOCAL_BIN"
+
+# Add user desktop shortcuts to XDG_DATA_DIRS
+export XDG_DATA_DIRS="$XDG_DATA_DIRS:$HOME_LOCAL_SHARE_APPLICATIONS"
+
+# cleanup
+unset HOME_LOCAL_BIN
+unset HOME_LOCAL_SHARE_APPLICATIONS
+EOF
+
+
+# === KERNEL CMDLINE ===
 
 _echo "Setting up kernel command-line (UKI-only) ..."
 
