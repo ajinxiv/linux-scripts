@@ -54,7 +54,7 @@ case "\$TERM" in
 esac
 
 # prompt
-PS1='\[\e[1;96m\]\u\[\e[0m\]@\[\e[1;93m\]\h\[\e[0m\] [\[\e[32m\]\w\[\e[0m\]] \$ '
+PS1='\[\e[1;96m\]\u\[\e[0m\]@\[\e[1;93m\]\h\[\e[0m\] [\[\e[32m\]\w\[\e[0m\]] \\\$ '
 
 # ls aliases
 alias ll='ls -l'
@@ -81,6 +81,64 @@ cat << EOF > /etc/skel/.bash_logout
 #
 # ~/.bash_logout
 #
+EOF
+
+
+# === ROOT BASHRC ===
+
+_echo "Setting up root's bashrc ..."
+
+_info "/root/.bashrc"
+
+cat << EOF > /root/.bashrc
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ \$- != *i* ]] && return
+
+# set history size
+HISTSIZE=1000
+
+# prevent duplicates
+HISTCONTROL=ignoreboth
+
+# append to the history instead of overwriting
+shopt -s histappend
+
+# check terminal window size to update $LINES and $COLUMNS
+shopt -s checkwinsize
+
+# enable colors
+case "\$TERM" in
+  xterm-color|*-256color)
+    alias ls='ls --color=auto --group-directories-first'
+
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+    alias ip='ip --color=auto'
+    alias tree='tree -C'
+    ;;
+esac
+
+# prompt
+PS1='\[\e[1;31m\]\u\[\e[0m\]@\[\e[1;33m\]\h\[\e[0m\] [\[\e[32m\]\w\[\e[0m\]] \\\$ '
+
+# ls aliases
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+
+# load profile definitions
+[[ -f ~/.bash_profile ]] && . ~/.bash_profile
+
+# load bash aliases
+[[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
 EOF
 
 
