@@ -33,7 +33,7 @@ this script:
     - creates a 4GB max Z-Ram
     - enables and configures resolved to cache DNS
     - increases network backlog
-    - reduces swappiness to 30
+    - reduces swappiness to 10
     - tunes schedulers for storage device types
     - reduces audio latency problems
     - loads NTSync for better performance in Windows software
