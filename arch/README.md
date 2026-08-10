@@ -33,16 +33,18 @@ this script:
     - creates a 4GB max Z-Ram
     - enables and configures resolved to cache DNS
     - increases network backlog
+    - reduces swappiness to 30
     - tunes schedulers for storage device types
-    - tunes reduces audio latency problems
+    - reduces audio latency problems
     - loads NTSync for better performance in Windows software
 - customizes the system:
     - adds custom bashrc for skel
+    - adds custom bashrc for root
     - adds ~/.local/bin to PATH on system level
     - enables password feedback for SUDO
-    - sets up wheel group for admins
+    - sets up wheel group for admins in SUDO
     - configures iommu for pass-through
-    - configures system resolution to 1920x1080 @ 200Hz
+    - configures system resolution to 1920x1080 @ 144Hz
 - improves sytem usability:
     - loads I2C-dev to allow changing monitor brightness via DDCutil
 
