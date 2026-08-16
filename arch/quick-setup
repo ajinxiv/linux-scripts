@@ -304,7 +304,7 @@ mkdir -p /etc/cmdline.d
 _info "/etc/cmdline.d/11-video-and-iommu.conf"
 
 cat << EOF > /etc/cmdline.d/11-video-and-iommu.conf
-video=DP-1:1920x1080@144 iommu=pt
+video=DP-1:1920x1080@200 iommu=pt
 EOF
 
 
