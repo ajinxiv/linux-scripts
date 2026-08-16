@@ -225,20 +225,6 @@ VDPAU_DRIVER=radeonsi
 EOF
 
 
-# === ZRAM GENERATOR ===
-
-_echo "Setting up ZRAM Generator ..."
-
-_info "/etc/systemd/zram-generator.conf"
-
-cat << EOF > /etc/systemd/zram-generator.conf
-[zram0]
-zram-size = min(ram / 4, 4096)
-compression-algorithm = zstd
-options = discard
-EOF
-
-
 # === SYSTEMD-RESOLVED  ===
 
 _echo "Setting up systemd-resolved ..."

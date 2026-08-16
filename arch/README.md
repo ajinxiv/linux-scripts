@@ -30,7 +30,6 @@ this script:
 - increases system responsiveness:
     - tunes graphics drivers for Radeon GPUs
     - tunes ROCm to work on Radeon RX 6600
-    - creates a 4GB max Z-Ram
     - enables and configures resolved to cache DNS
     - increases network backlog
     - reduces swappiness to 10
