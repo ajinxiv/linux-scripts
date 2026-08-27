@@ -281,16 +281,16 @@ EOF
 
 # === KERNEL CMDLINE ===
 
-_echo "Setting up kernel command-line (UKI-only) ..."
+_echo "Setting up video mode in kernel command-line (UKI-only) ..."
 
 _info "/etc/cmdline.d"
 
 mkdir -p /etc/cmdline.d
 
-_info "/etc/cmdline.d/11-video-and-iommu.conf"
+_info "/etc/cmdline.d/11-video.conf"
 
-cat << EOF > /etc/cmdline.d/11-video-and-iommu.conf
-video=DP-1:1920x1080@200 iommu=pt
+cat << EOF > /etc/cmdline.d/11-video.conf
+video=DP-1:1920x1080@200
 EOF
 
 
