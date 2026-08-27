@@ -43,8 +43,6 @@ this script:
     - enables password feedback for SUDO
     - sets up wheel group for admins in SUDO
     - configures system resolution to 1920x1080 @ 200Hz
-- improves sytem usability:
-    - loads I2C-dev to allow changing monitor brightness via DDCutil
 
 usage:
 

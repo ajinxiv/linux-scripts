@@ -296,14 +296,6 @@ EOF
 
 # === KERNEL MODULES ===
 
-_echo "Setting up kernel modules ..."
-
-_info "/etc/modules-load.d/i2c-dev.conf"
-
-cat << EOF > /etc/modules-load.d/i2c-dev.conf
-i2c-dev
-EOF
-
 _info "/etc/modules-load.d/ntsync.conf"
 
 cat << EOF > /etc/modules-load.d/ntsync.conf
