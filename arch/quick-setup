@@ -261,6 +261,13 @@ cat << EOF > /etc/sudoers.d/10_default
 Defaults pwfeedback
 EOF
 
+_info "/etc/sudoers.d/90_scxctl"
+
+cat << EOF > /etc/sudoers.d/90_scxctl
+# Allow users of group 'wheel' to use scxctl without asking password
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/scxctl
+EOF
+
 
 # === USER XDG DIRECTORIES ===
 

@@ -42,6 +42,7 @@ this script:
     - adds ~/.local/bin to PATH on system level
     - enables password feedback for SUDO
     - sets up wheel group for admins in SUDO
+    - configures SUDO to not ask password for users of group 'wheel' for the command `scxctl`
     - configures system resolution to 1920x1080 @ 200Hz
 
 usage:
