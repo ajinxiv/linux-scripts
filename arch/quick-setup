@@ -309,6 +309,37 @@ cat << EOF > /etc/modules-load.d/ntsync.conf
 ntsync
 EOF
 
+
+# === SCX SCHEDULERS ===
+
+_echo "Installing scx-scheds and scx-tools ..."
+
+_info "pacman -S --noconfirm scx-scheds scx-tools"
+
+pacman -S --noconfirm scx-scheds scx-tools
+
+
+# === GAMEMODE ===
+
+_echo "Setting up Game Mode ..."
+
+_info "pacman -S --noconfirm gamemode"
+
+pacman -S --noconfirm gamemode
+
+_info "systemctl --global enable gamemoded.service"
+
+systemctl --global enable gamemoded.service
+
+_info "/etc/gamemode.ini"
+
+cat << EOF > /etc/gamemode.ini
+[custom]
+start=sudo scxctl start --sched lavd
+end=sudo scxctl stop
+EOF
+
+
 # ===///===
 
 _echo "Done"

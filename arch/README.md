@@ -36,6 +36,8 @@ this script:
     - tunes schedulers for storage device types
     - reduces audio latency problems
     - loads NTSync for better performance in Windows software
+    - installs scx-sched and scx-tools
+    - installs and configures gamemode
 - customizes the system:
     - adds custom bashrc for skel
     - adds custom bashrc for root
