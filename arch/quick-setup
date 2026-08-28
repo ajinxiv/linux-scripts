@@ -303,6 +303,8 @@ EOF
 
 # === KERNEL MODULES ===
 
+_echo "Setting up kernel modules ..."
+
 _info "/etc/modules-load.d/ntsync.conf"
 
 cat << EOF > /etc/modules-load.d/ntsync.conf
