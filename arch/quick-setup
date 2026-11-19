@@ -221,7 +221,7 @@ EOF
 _info "/etc/environment.d/30-vdpau.conf"
 
 cat << EOF > /etc/environment.d/30-vdpau.conf
-VDPAU_DRIVER=radeonsi
+VDPAU_DRIVER=va_gl
 EOF
 
 
