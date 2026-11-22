@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+
+_BASE_URL='https://archive.archlinux.org/packages'
+
+
+# detect script location
+_scriptloc="$(dirname $0)"
+
+if [ "$_scriptloc" != "." ] && grep -q -P "$_scriptloc" <<< "$PATH"; then
+  _script="$(basename $0)"
+else
+  _script="$0"
+fi
+
+
+# identify package name, version, and architecture
+pkgname="$1"
+pkgver="$2"
+arch="$3"
+
+if [ -z "$arch" ]; then
+  arch="x86_64"
+fi
+
+_echo() { echo -e "  \e[1;97m$1\e[m \e[1;94m$2\e[m \e[1;92m$3\e[m \e[1;93m$4\e[m"; }
+
+
+if [ -z "$pkgname" ] || [ -z "$pkgver" ]; then
+  echo -e "\e[1;31merror:\e[m pkgname or pkgver not provided"
+  echo -e "\e[1mUsage:\e[m"
+  _echo "$_script" "pkgname" "pkgver" "[arch]"
+  echo -e "\n\e[1mExamples:\e[m"
+  _echo "$_script" "python" "3.14.9-2"
+  _echo "$_script" "glibc" "2.44+r78+gfcfb867c58ab-1"
+  _echo "$_script" "python-certifi" "2026.10.23-1" "any"
+  exit 1
+fi
+
+
+# install package from Arch Linux package archive
+sudo pacman -U "${_BASE_URL}/${pkgname:0:1}/${pkgname}/${pkgname}-${pkgver}-${arch}.pkg.tar.zst"
